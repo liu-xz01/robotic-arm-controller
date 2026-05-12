@@ -76,7 +76,7 @@ body {
 .logo {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
 .logo-icon {
@@ -85,10 +85,36 @@ body {
     color: var(--primary-color);
 }
 
+.logo-icon-img {
+    height: 42px;
+    width: auto;
+    object-fit: contain;
+}
+
 .logo-text {
     font-size: 18px;
     font-weight: 600;
     color: var(--text-primary);
+}
+
+.logo-text-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.logo-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a2e;
+    line-height: 1.2;
+}
+
+.logo-subtitle {
+    font-size: 11px;
+    font-weight: 400;
+    color: #5c6b7f;
+    line-height: 1.2;
 }
 
 .header-actions {
