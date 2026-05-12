@@ -1,0 +1,35 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Start Live Server",
+      "type": "shell",
+      "command": "npx live-server --port=5500 --no-browser",
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "."
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".",
+          "endsPattern": "."
+        }
+      }
+    },
+    {
+      "label": "Open in Browser",
+      "type": "shell",
+      "command": "start index.html",
+      "windows": {
+        "command": "start index.html"
+      },
+      "osx": {
+        "command": "open index.html"
+      },
+      "linux": {
+        "command": "xdg-open index.html"
+      }
+    }
+  ]
+}

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>机械臂控制系统 | Robotic Arm Controller</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 顶部导航栏 -->
+        <header class="header">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5"/>
+                    <path d="M2 12l10 5 10-5"/>
+                </svg>
+                <span class="logo-text">机械臂控制系统</span>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-secondary" id="btn-connect">
+                    <span class="status-dot disconnected"></span>
+                    连接设备
+                </button>
+                <button class="btn btn-primary" id="btn-emergency">紧急停止</button>
+            </div>
+        </header>
+
+        <div class="main-content">
+            <!-- 左侧控制面板 -->
+            <aside class="control-panel">
+                <!-- 模式切换 -->
+                <div class="panel-section">
+                    <h3 class="panel-title">控制模式</h3>
+                    <div class="mode-tabs">
+                        <button class="mode-tab active" data-mode="joint">关节控制</button>
+                        <button class="mode-tab" data-mode="cartesian">坐标控制</button>
+                    </div>
+                </div>
+
+                <!-- 关节控制面板 -->
+                <div class="panel-section joint-control" id="joint-panel">
+                    <h3 class="panel-title">关节角度控制</h3>
+                    
+                    <div class="joint-sliders">
+                        <div class="joint-item">
+                            <div class="joint-header">
+                                <label>关节 1 (底座)</label>
+                                <span class="joint-value" id="j1-value">0°</span>
+                            </div>
+                            <input type="range" class="slider" id="j1-slider" min="-180" max="180" value="0">
+                            <div class="joint-range">-180° ~ 180°</div>
+                        </div>
+
+                        <div class="joint-item">
+                            <div class="joint-header">
+                                <label>关节 2 (肩部)</label>
+                                <span class="joint-value" id="j2-value">0°</span>
+                            </div>
+                            <input type="range" class="slider" id="j2-slider" min="-90" max="90" value="0">
+                            <div class="joint-range">-90° ~ 90°</div>
+                        </div>
+
+                        <div class="joint-item">
+                            <div class="joint-header">
+                                <label>关节 3 (肘部)</label>
+                                <span class="joint-value" id="j3-value">0°</span>
+                            </div>
+                            <input type="range" class="slider" id="j3-slider" min="-150" max="150" value="0">
+                            <div class="joint-range">-150° ~ 150°</div>
+                        </div>
+
+                        <div class="joint-item">
+                            <div class="joint-header">
+                                <label>关节 4 (腕部)</label>
+                                <span class="joint-value" id="j4-value">0°</span>
+                            </div>
+                            <input type="range" class="slider" id="j4-slider" min="-180" max="180" value="0">
+                            <div class="joint-range">-180° ~ 180°</div>
+                        </div>
+
+                        <div class="joint-item">
+                            <div class="joint-header">
+                                <label>关节 5 (翻转)</label>
+                                <span class="joint-value" id="j5-value">0°</span>
+                            </div>
+                            <input type="range" class="slider" id="j5-slider" min="-90" max="90" value="0">
+                            <div class="joint-range">-90° ~ 90°</div>
+                        </div>
+
+                        <div class="joint-item">
+                            <div class="joint-header">
+                                <label>关节 6 (旋转)</label>
+                                <span class="joint-value" id="j6-value">0°</span>
+                            </div>
+                            <input type="range" class="slider" id="j6-slider" min="-180" max="180" value="0">
+                            <div class="joint-range">-180° ~ 180°</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 坐标控制面板 (默认隐藏) -->
+                <div class="panel-section cartesian-control hidden" id="cartesian-panel">
+                    <h3 class="panel-title">笛卡尔坐标控制</h3>
+                    
+                    <div class="coord-inputs">
+                        <div class="input-group">
+                            <label>X 轴位置 (mm)</label>
+                            <input type="number" id="coord-x" value="300" step="1">
+                        </div>
+                        <div class="input-group">
+                            <label>Y 轴位置 (mm)</label>
+                            <input type="number" id="coord-y" value="0" step="1">
+                        </div>
+                        <div class="input-group">
+                            <label>Z 轴位置 (mm)</label>
+                            <input type="number" id="coord-z" value="200" step="1">
+                        </div>
+                        <div class="input-group">
+                            <label>Roll (°)</label>
+                            <input type="number" id="coord-roll" value="0" step="1">
+                        </div>
+                        <div class="input-group">
+                            <label>Pitch (°)</label>
+                            <input type="number" id="coord-pitch" value="0" step="1">
+                        </div>
+                        <div class="input-group">
+                            <label>Yaw (°)</label>
+                            <input type="number" id="coord-yaw" value="0" step="1">
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary btn-full" id="btn-move-to">移动到位置</button>
+                </div>
+
+                <!-- 速度控制 -->
+                <div class="panel-section">
+                    <h3 class="panel-title">运动参数</h3>
+                    <div class="joint-item">
+                        <div class="joint-header">
+                            <label>运动速度</label>
+                            <span class="joint-value" id="speed-value">50%</span>
+                        </div>
+                        <input type="range" class="slider" id="speed-slider" min="1" max="100" value="50">
+                    </div>
+                    <div class="joint-item">
+                        <div class="joint-header">
+                            <label>加速度</label>
+                            <span class="joint-value" id="accel-value">30%</span>
+                        </div>
+                        <input type="range" class="slider" id="accel-slider" min="1" max="100" value="30">
+                    </div>
+                </div>
+
+                <!-- 快捷操作 -->
+                <div class="panel-section">
+                    <h3 class="panel-title">快捷操作</h3>
+                    <div class="quick-actions">
+                        <button class="btn btn-secondary" id="btn-home">🏠 归位</button>
+                        <button class="btn btn-secondary" id="btn-zero">⭕ 归零</button>
+                        <button class="btn btn-secondary" id="btn-grip-open">🖐 张开夹爪</button>
+                        <button class="btn btn-secondary" id="btn-grip-close">✊ 闭合夹爪</button>
+                    </div>
+                </div>
+
+                <!-- 预设动作 -->
+                <div class="panel-section">
+                    <h3 class="panel-title">预设动作</h3>
+                    <div class="preset-actions">
+                        <button class="btn btn-outline" id="preset-pick">📦 抓取</button>
+                        <button class="btn btn-outline" id="preset-place">📍 放置</button>
+                        <button class="btn btn-outline" id="preset-wave">👋 挥手</button>
+                        <button class="btn btn-outline" id="preset-dance">💃 舞蹈</button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- 右侧可视化区域 -->
+            <main class="visualization-panel">
+                <div class="canvas-container">
+                    <canvas id="robot-canvas"></canvas>
+                    <div class="canvas-overlay">
+                        <div class="position-display">
+                            <div class="pos-item">
+                                <span class="pos-label">X:</span>
+                                <span class="pos-value" id="disp-x">300.0</span>
+                                <span class="pos-unit">mm</span>
+                            </div>
+                            <div class="pos-item">
+                                <span class="pos-label">Y:</span>
+                                <span class="pos-value" id="disp-y">0.0</span>
+                                <span class="pos-unit">mm</span>
+                            </div>
+                            <div class="pos-item">
+                                <span class="pos-label">Z:</span>
+                                <span class="pos-value" id="disp-z">200.0</span>
+                                <span class="pos-unit">mm</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 状态信息 -->
+                <div class="status-panel">
+                    <div class="status-grid">
+                        <div class="status-card">
+                            <div class="status-icon">🔗</div>
+                            <div class="status-info">
+                                <div class="status-label">连接状态</div>
+                                <div class="status-value" id="conn-status">未连接</div>
+                            </div>
+                        </div>
+                        <div class="status-card">
+                            <div class="status-icon">⚡</div>
+                            <div class="status-info">
+                                <div class="status-label">运行状态</div>
+                                <div class="status-value" id="run-status">待机</div>
+                            </div>
+                        </div>
+                        <div class="status-card">
+                            <div class="status-icon">🎯</div>
+                            <div class="status-info">
+                                <div class="status-label">当前模式</div>
+                                <div class="status-value" id="mode-status">关节控制</div>
+                            </div>
+                        </div>
+                        <div class="status-card">
+                            <div class="status-icon">🌡️</div>
+                            <div class="status-info">
+                                <div class="status-label">电机温度</div>
+                                <div class="status-value" id="temp-status">35°C</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 日志面板 -->
+                <div class="log-panel">
+                    <div class="log-header">
+                        <h4>系统日志</h4>
+                        <button class="btn btn-sm" id="btn-clear-log">清空</button>
+                    </div>
+                    <div class="log-content" id="log-content">
+                        <div class="log-item info">
+                            <span class="log-time">09:15:30</span>
+                            <span class="log-text">系统初始化完成</span>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
