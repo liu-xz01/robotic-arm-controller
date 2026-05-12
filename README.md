@@ -78,10 +78,15 @@ robotic-arm-controller/
 ├── 📄 package.json           # Node.js 依赖配置
 ├── 📄 config.json            # 配置文件
 ├── 📄 index.html             # 前端界面
+├── 📄 manifest.json          # PWA 配置文件
 ├── 📁 css/
 │   └── style.css             # 样式文件
 ├── 📁 js/
 │   └── app.js                # 前端逻辑 (含WebSocket通信)
+├── 📁 assets/
+│   └── 📁 icons/
+│       ├── logo.svg          # 应用图标 (矢量)
+│       └── logo-{size}.svg   # 各种尺寸图标
 ├── 📁 .vscode/               # VSCode 配置
 └── 📄 README.md              # 使用说明
 ```
@@ -227,6 +232,29 @@ case 'execute_preset':
 | Chrome/Edge | ✅ 推荐 |
 | Firefox | ✅ 支持 |
 | Safari | ✅ 支持 |
+
+## 🎨 应用图标
+
+应用包含完整的图标系统：
+
+### 图标规格
+- **格式**: SVG (可无限缩放)
+- **尺寸**: 16px, 32px, 48px, 64px, 128px, 192px, 256px, 512px
+- **设计**: 机械臂机器人风格，蓝绿色调
+
+### 图标预览
+主图标 `assets/icons/logo.svg` 包含：
+- 蓝色渐变背景圆形
+- 白色机械臂图形
+- 绿色关节指示点
+- 红色夹爪
+- 橙色数据流动画装饰
+
+### PWA 支持
+应用支持 PWA (渐进式 Web 应用)：
+- 可添加到手机/桌面主屏幕
+- 离线访问能力
+- 原生应用体验
 
 ## 🐛 故障排查
 
